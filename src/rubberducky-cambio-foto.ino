@@ -1,7 +1,7 @@
 #include "Keyboard.h"
 
 // SUSTITUYE ESTA URL por la URL "Raw" de tu archivo fondo.ps1 en GitHub
-const char* scriptUrl = "https://raw.githubusercontent.com/tu-usuario/tu-repo/main/fondo.ps1";
+const char* scriptUrl = "https://raw.githubusercontent.com/M1ch43l-B/rubber-ducky-casero/refs/heads/main/src/fondo.ps1";
 
 void typeLatam(String text) {
   for (int i = 0; i < text.length(); i++) {
